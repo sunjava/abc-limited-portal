@@ -23,19 +23,45 @@ class Command(BaseCommand):
 
         # Create services if they don't exist
         services_data = [
-            {'name': 'Unlimited Talk & Text', 'price': 25.00, 'description': 'Unlimited domestic talk and text'},
-            {'name': 'Unlimited Data', 'price': 35.00, 'description': 'Unlimited high-speed data'},
-            {'name': 'International Calling', 'price': 15.00, 'description': 'Unlimited international calling'},
-            {'name': 'Mobile Hotspot', 'price': 20.00, 'description': '10GB mobile hotspot'},
-            {'name': 'Device Protection', 'price': 12.00, 'description': 'Complete device protection plan'},
+            {
+                'name': 'International Pass - Europe',
+                'service_type': 'INTERNATIONAL_PASS',
+                'price': 25.00,
+                'description': 'Unlimited talk, text, and data in Europe',
+                'duration_days': 30,
+                'data_allowance_mb': 5120,  # 5GB
+                'features': ['Unlimited talk', 'Unlimited text', '5GB data']
+            },
+            {
+                'name': 'Data Add-on - 10GB',
+                'service_type': 'DATA_ADDON',
+                'price': 35.00,
+                'description': 'Additional 10GB of high-speed data',
+                'duration_days': 30,
+                'data_allowance_mb': 10240,  # 10GB
+                'features': ['10GB high-speed data', 'No overage charges']
+            },
+            {
+                'name': 'International Calling',
+                'service_type': 'CALLING_ADDON',
+                'price': 15.00,
+                'description': 'Unlimited international calling to 50+ countries',
+                'duration_days': 30,
+                'data_allowance_mb': None,
+                'features': ['50+ countries', 'Unlimited minutes', 'Clear HD voice']
+            },
         ]
 
         for service_data in services_data:
             service, created = Service.objects.get_or_create(
                 name=service_data['name'],
                 defaults={
+                    'service_type': service_data['service_type'],
                     'price': service_data['price'],
-                    'description': service_data['description']
+                    'description': service_data['description'],
+                    'duration_days': service_data['duration_days'],
+                    'data_allowance_mb': service_data['data_allowance_mb'],
+                    'features': service_data['features']
                 }
             )
             if created:
