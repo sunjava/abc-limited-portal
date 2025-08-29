@@ -30,6 +30,17 @@
     </div>
     {% endif %}
     
+    {% if debug_info %}
+    <div class="debug">
+        <h3>Debug Steps:</h3>
+        <ol>
+        {% for info in debug_info %}
+            <li>{{ info }}</li>
+        {% endfor %}
+        </ol>
+    </div>
+    {% endif %}
+    
     {% if user.is_authenticated %}
     <div class="debug success">
         <h3>✅ You are logged in!</h3>

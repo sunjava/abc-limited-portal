@@ -209,26 +209,65 @@ def logout_view(request):
 def debug_login_view(request):
     """Debug login view to test authentication"""
     error = None
+    debug_info = []
     
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
         
+        debug_info.append(f"POST data received: username='{username}', password_length={len(password)}")
         print(f"DEBUG LOGIN: Username='{username}', Password length={len(password)}")
         
         if username and password:
-            user = authenticate(request, username=username, password=password)
-            if user is not None and user.is_active:
-                print(f"DEBUG LOGIN: Authentication successful for {user.username}")
-                login(request, user)
-                return redirect('debug_login')  # Redirect to show logged in state
-            else:
-                print(f"DEBUG LOGIN: Authentication failed for '{username}'")
-                error = "Authentication failed"
+            debug_info.append("Username and password provided")
+            
+            # Test authentication step by step
+            try:
+                # Step 1: Check if user exists
+                from django.contrib.auth.models import User
+                user_obj = User.objects.get(username=username)
+                debug_info.append(f"User found: {user_obj.username} (ID: {user_obj.id}, Active: {user_obj.is_active})")
+                
+                # Step 2: Check password
+                password_ok = user_obj.check_password(password)
+                debug_info.append(f"Password check: {password_ok}")
+                
+                # Step 3: Try authenticate
+                user = authenticate(request, username=username, password=password)
+                debug_info.append(f"Django authenticate result: {user}")
+                
+                if user is not None and user.is_active:
+                    debug_info.append(f"Authentication successful for {user.username}")
+                    print(f"DEBUG LOGIN: Authentication successful for {user.username}")
+                    
+                    # Step 4: Try login
+                    try:
+                        login(request, user)
+                        debug_info.append("Django login() called successfully")
+                        print(f"DEBUG LOGIN: Django login() successful")
+                        return redirect('debug_login')  # Redirect to show logged in state
+                    except Exception as login_error:
+                        debug_info.append(f"Django login() failed: {str(login_error)}")
+                        error = f"Login failed: {str(login_error)}"
+                else:
+                    debug_info.append(f"Authentication failed - user: {user}, active: {user.is_active if user else 'N/A'}")
+                    print(f"DEBUG LOGIN: Authentication failed for '{username}'")
+                    error = "Authentication failed"
+                    
+            except User.DoesNotExist:
+                debug_info.append("User does not exist")
+                error = "User not found"
+            except Exception as e:
+                debug_info.append(f"Exception during authentication: {str(e)}")
+                error = f"Error: {str(e)}"
         else:
+            debug_info.append("Username or password missing")
             error = "Please provide username and password"
     
-    return render(request, 'debug_login.html', {'error': error})
+    return render(request, 'debug_login.html', {
+        'error': error,
+        'debug_info': debug_info
+    })
 
 def signup_view(request):
     if request.method == 'POST':
