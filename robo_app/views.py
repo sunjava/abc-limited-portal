@@ -330,6 +330,17 @@ def database_admin_view(request):
                 message = f"Error populating sample data: {str(e)}"
                 message_type = "error"
                 
+        elif action == 'populate_100_accounts':
+            try:
+                # Run the populate 100 accounts command
+                out = io.StringIO()
+                call_command('populate_100_accounts', stdout=out)
+                message = f"100 accounts populated: {out.getvalue()}"
+                message_type = "success"
+            except Exception as e:
+                message = f"Error populating 100 accounts: {str(e)}"
+                message_type = "error"
+                
         elif action == 'run_migrations':
             try:
                 out = io.StringIO()
@@ -351,6 +362,11 @@ def database_admin_view(request):
     users = User.objects.all()[:20]  # Limit to first 20 users
     user_count = User.objects.count()
     
+    # Get account and line counts
+    from .models import Account, Line
+    account_count = Account.objects.count()
+    line_count = Line.objects.count()
+    
     # Check if sm user exists
     sm_user_exists = False
     sm_user = None
@@ -364,6 +380,8 @@ def database_admin_view(request):
         'db_info': db_info,
         'users': users,
         'user_count': user_count,
+        'account_count': account_count,
+        'line_count': line_count,
         'sm_user_exists': sm_user_exists,
         'sm_user': sm_user,
         'message': message,

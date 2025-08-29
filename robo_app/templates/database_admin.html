@@ -21,6 +21,16 @@
         <p><strong>Database Engine:</strong> {{ db_info.engine }}</p>
         <p><strong>Database Name:</strong> {{ db_info.name }}</p>
         <p><strong>Total Users:</strong> {{ user_count }}</p>
+        <p><strong>Total Accounts:</strong> {{ account_count }}</p>
+        <p><strong>Total Lines:</strong> {{ line_count }}</p>
+        
+        {% if account_count == 0 %}
+        <p class="warning">⚠️ No accounts found - consider populating sample data</p>
+        {% elif account_count < 10 %}
+        <p class="warning">⚠️ Only {{ account_count }} accounts - consider populating 100 accounts for testing</p>
+        {% else %}
+        <p class="success">✅ Database has {{ account_count }} accounts with {{ line_count }} lines</p>
+        {% endif %}
     </div>
     
     {% if users %}
@@ -73,7 +83,14 @@
     {% endif %}
     
     <div class="section">
-        <h3>Actions</h3>
+        <h3>Database Actions</h3>
+        
+        <form method="post" action="/database-admin/" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="run_migrations">
+            <button type="submit">Run Migrations</button>
+        </form>
+        
         <form method="post" action="/database-admin/" style="display: inline;">
             {% csrf_token %}
             <input type="hidden" name="action" value="populate_sample_data">
@@ -82,9 +99,11 @@
         
         <form method="post" action="/database-admin/" style="display: inline;">
             {% csrf_token %}
-            <input type="hidden" name="action" value="run_migrations">
-            <button type="submit">Run Migrations</button>
+            <input type="hidden" name="action" value="populate_100_accounts">
+            <button type="submit" class="danger" onclick="return confirm('This will create 100 accounts with sample data. Continue?')">Populate 100 Accounts</button>
         </form>
+        
+        <p><small><strong>Note:</strong> "Populate 100 Accounts" creates realistic account data with lines, services, and billing information for testing purposes.</small></p>
     </div>
     
     <p><a href="/debug-login/">Back to Debug Login</a> | <a href="/login/">Regular Login</a></p>
