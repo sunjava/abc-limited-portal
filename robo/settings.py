@@ -38,11 +38,16 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     '.railway.app',  # Railway domains
     '.up.railway.app',  # Railway domains
+    '*',  # Allow all hosts for now (Railway deployment)
 ]
 
 # Add Railway's domain to allowed hosts
 if os.environ.get('RAILWAY_STATIC_URL'):
     ALLOWED_HOSTS.append(os.environ.get('RAILWAY_STATIC_URL').replace('https://', '').replace('http://', ''))
+
+# Add Railway public URL if available
+if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    ALLOWED_HOSTS.append(os.environ.get('RAILWAY_PUBLIC_DOMAIN'))
 
 
 # Application definition
@@ -160,6 +165,14 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.railway.app',
     'https://*.up.railway.app',
 ]
+
+# Add Railway public domain to CSRF trusted origins if available
+if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    railway_domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+    CSRF_TRUSTED_ORIGINS.extend([
+        f'https://{railway_domain}',
+        f'http://{railway_domain}',
+    ])
 
 LOGIN_URL = '/login/'
 
