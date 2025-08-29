@@ -1,0 +1,143 @@
+warning: LF will be replaced by CRLF in demo_app/templates/demo_app/account_details.html.
+The file will have its original line endings in your working directory
+[1mdiff --git a/db.sqlite3 b/db.sqlite3[m
+[1mindex b703b44..901fcf4 100644[m
+Binary files a/db.sqlite3 and b/db.sqlite3 differ
+[1mdiff --git a/demo_app/__pycache__/chatbot.cpython-311.pyc b/demo_app/__pycache__/chatbot.cpython-311.pyc[m
+[1mindex 7b39d36..d862e1a 100644[m
+Binary files a/demo_app/__pycache__/chatbot.cpython-311.pyc and b/demo_app/__pycache__/chatbot.cpython-311.pyc differ
+[1mdiff --git a/demo_app/management/commands/cancel_lines.py b/demo_app/management/commands/cancel_lines.py[m
+[1mindex d37da5d..4f1a9d4 100644[m
+[1m--- a/demo_app/management/commands/cancel_lines.py[m
+[1m+++ b/demo_app/management/commands/cancel_lines.py[m
+[36m@@ -118,3 +118,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/check_middleware.py b/demo_app/management/commands/check_middleware.py[m
+[1mindex ed937cf..fdf8a31 100644[m
+[1m--- a/demo_app/management/commands/check_middleware.py[m
+[1m+++ b/demo_app/management/commands/check_middleware.py[m
+[36m@@ -55,3 +55,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/test_modal_trigger.py b/demo_app/management/commands/test_modal_trigger.py[m
+[1mindex 0a8a5b4..841e95c 100644[m
+[1m--- a/demo_app/management/commands/test_modal_trigger.py[m
+[1m+++ b/demo_app/management/commands/test_modal_trigger.py[m
+[36m@@ -79,3 +79,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/test_reactivate_lines.py b/demo_app/management/commands/test_reactivate_lines.py[m
+[1mindex c1f80df..dbdf9af 100644[m
+[1m--- a/demo_app/management/commands/test_reactivate_lines.py[m
+[1m+++ b/demo_app/management/commands/test_reactivate_lines.py[m
+[36m@@ -146,3 +146,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/test_service_selection.py b/demo_app/management/commands/test_service_selection.py[m
+[1mindex 1a80aff..28ffa02 100644[m
+[1m--- a/demo_app/management/commands/test_service_selection.py[m
+[1m+++ b/demo_app/management/commands/test_service_selection.py[m
+[36m@@ -79,3 +79,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/test_suspend_behavior.py b/demo_app/management/commands/test_suspend_behavior.py[m
+[1mindex f3c0fa1..29ae8fb 100644[m
+[1m--- a/demo_app/management/commands/test_suspend_behavior.py[m
+[1m+++ b/demo_app/management/commands/test_suspend_behavior.py[m
+[36m@@ -106,3 +106,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/test_suspend_generic.py b/demo_app/management/commands/test_suspend_generic.py[m
+[1mindex dcbd40c..79752a5 100644[m
+[1m--- a/demo_app/management/commands/test_suspend_generic.py[m
+[1m+++ b/demo_app/management/commands/test_suspend_generic.py[m
+[36m@@ -94,3 +94,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/management/commands/test_upgrade_functionality.py b/demo_app/management/commands/test_upgrade_functionality.py[m
+[1mindex f3c85f3..b702ca4 100644[m
+[1m--- a/demo_app/management/commands/test_upgrade_functionality.py[m
+[1m+++ b/demo_app/management/commands/test_upgrade_functionality.py[m
+[36m@@ -75,3 +75,4 @@[m [mclass Command(BaseCommand):[m
+ [m
+ [m
+ [m
+[41m+[m
+[1mdiff --git a/demo_app/templates/demo_app/account_details.html b/demo_app/templates/demo_app/account_details.html[m
+[1mindex 5773500..f5a1b95 100644[m
+[1m--- a/demo_app/templates/demo_app/account_details.html[m
+[1m+++ b/demo_app/templates/demo_app/account_details.html[m
+[36m@@ -747,46 +747,78 @@[m
+         <div class="tab-content" id="accountTabsContent">[m
+             <!-- Account Details Tab -->[m
+             <div class="tab-pane fade show active" id="details" role="tabpanel">[m
+[31m-                <div class="account-attributes">[m
+[31m-                    <div class="row mb-2">[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Account Number</div>[m
+[31m-                            <div class="account-attr-value">{{ account.account_number }}</div>[m
+[31m-                        </div>[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">No. of lines</div>[m
+[31m-                            <div class="account-attr-value">{{ account.number_of_lines }}</div>[m
+[31m-                        </div>[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Created On</div>[m
+[31m-                            <div class="account-attr-value">{{ account.created_on|date:"d M Y" }}</div>[m
+[31m-                        </div>[m
+[31m-                    </div>[m
+[31m-                    <div class="row mb-2">[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Last Payment Date</div>[m
+[31m-                            <div class="account-attr-value">{{ account.last_payment_date|date:"d M Y"|default:"N/A" }}</div>[m
+[31m-                        </div>[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Payment Due Date</div>[m
+[31m-                            <div class="account-attr-value">{{ account.payment_due_date|date:"d M Y"|default:"N/A" }}</div>[m
+[31m-                        </div>[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Account Type</div>[m
+[31m-                            <div class="account-attr-value">{{ account.get_account_type_display }}</div>[m
+[31m-                        </div>[m
+[31m-                    </div>[m
+[31m-                    <div class="row mb-2">[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Last Modified On</div>[m
+[31m-                            <div class="account-attr-value">{{ account.last_modified_on|date:"d M Y" }}</div>[m
+[31m-                        </div>[m
+[31m-                        <div class="col-md-4 mb-2">[m
+[31m-                            <div class="account-attr-label">Status</div>[m
+[31m-                            <div class="account-attr-value status">{{ account.get_status_display }}</div>[m
+[31m-                        </div>[m
+[31m-                    </div>[m
+[31m-                </div>[m
+[32m+[m[32m                                 <div class="account-attributes">[m
+[32m+[m[32m                     <div class="d-flex justify-content-between align-items-center mb-3">[m
+[32m+[m[32m                         <h6 class="mb-0" style="color: var(--tmobile-magenta); font-weight: 600;">Account Information</h6>[m
+[32m+[m[32m                         <a href="#" class="add-autopay-link" style="color: var(--tmobile-magenta); text-decoration: none; font-size: 0.9rem; font-weight: 500;">[m
+[32m+[m[32m                             Add to AutoPay[m
+[32m+[m[32m                         </a>[m
+[32m+[m[32m                     </div>[m
+[32m+[m[32m                     <div class="row">[m
+[32m+[m[32m                         <div class="col-md-6">[m
+[32m+[m[32m                             <div class="row mb-2">[m
+[32m+[m[32m                                 <div class="col-md-6 mb-2">[m
+[32m+[m[32m                                     <div class="account-attr-label">Account Number</div>[m
+[32m+[m[32m                                     <div class="account-attr-value">{{ account.account_number }}</div>[m
+[32m+[m[32m                                 </div>[m
+[32m+[m[32m                                 <div class=

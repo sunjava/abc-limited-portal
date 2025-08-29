@@ -1,0 +1,5 @@
+[33m38004cb[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m Add breadcrumb navigation threads to all pages for easy navigation back to home
+[33ma3f1552[m[33m ([m[1;31morigin/main[m[33m)[m Update Edit Line Details modal: replace Payment Due Date with Employee Number editing
+[33mef100c7[m Add service functionality to line details page - same as account details page
+[33m94bd4d3[m Add line details page with navigation from account details
+[33m547a673[m Update account details template with new payment layout and AutoPay functionality
