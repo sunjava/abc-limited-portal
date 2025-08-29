@@ -269,6 +269,107 @@ def debug_login_view(request):
         'debug_info': debug_info
     })
 
+def database_admin_view(request):
+    """Database admin view to manage users directly"""
+    from django.db import connection
+    from django.core.management import call_command
+    import io
+    
+    message = None
+    message_type = None
+    
+    # Handle POST actions
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'create_sm_user':
+            try:
+                # Create the sm user
+                user = User.objects.create_user(
+                    username='sm',
+                    email='sm@example.com',
+                    password='sunjava@123',
+                    first_name='System',
+                    last_name='Manager'
+                )
+                user.is_active = True
+                user.is_staff = True
+                user.is_superuser = True
+                user.save()
+                message = f"User 'sm' created successfully with ID {user.id}"
+                message_type = "success"
+            except Exception as e:
+                message = f"Error creating user 'sm': {str(e)}"
+                message_type = "error"
+                
+        elif action == 'reset_sm_password':
+            try:
+                user = User.objects.get(username='sm')
+                user.set_password('sunjava@123')
+                user.is_active = True
+                user.is_staff = True
+                user.is_superuser = True
+                user.save()
+                message = "Password reset for user 'sm' completed"
+                message_type = "success"
+            except User.DoesNotExist:
+                message = "User 'sm' not found"
+                message_type = "error"
+            except Exception as e:
+                message = f"Error resetting password: {str(e)}"
+                message_type = "error"
+                
+        elif action == 'populate_sample_data':
+            try:
+                # Run the populate sample data command
+                out = io.StringIO()
+                call_command('populate_sample_data', stdout=out)
+                message = f"Sample data populated: {out.getvalue()}"
+                message_type = "success"
+            except Exception as e:
+                message = f"Error populating sample data: {str(e)}"
+                message_type = "error"
+                
+        elif action == 'run_migrations':
+            try:
+                out = io.StringIO()
+                call_command('migrate', stdout=out)
+                message = f"Migrations completed: {out.getvalue()}"
+                message_type = "success"
+            except Exception as e:
+                message = f"Error running migrations: {str(e)}"
+                message_type = "error"
+    
+    # Get database info
+    db_settings = connection.settings_dict
+    db_info = {
+        'engine': db_settings.get('ENGINE', 'Unknown'),
+        'name': db_settings.get('NAME', 'Unknown'),
+    }
+    
+    # Get all users
+    users = User.objects.all()[:20]  # Limit to first 20 users
+    user_count = User.objects.count()
+    
+    # Check if sm user exists
+    sm_user_exists = False
+    sm_user = None
+    try:
+        sm_user = User.objects.get(username='sm')
+        sm_user_exists = True
+    except User.DoesNotExist:
+        pass
+    
+    return render(request, 'database_admin.html', {
+        'db_info': db_info,
+        'users': users,
+        'user_count': user_count,
+        'sm_user_exists': sm_user_exists,
+        'sm_user': sm_user,
+        'message': message,
+        'message_type': message_type,
+    })
+
 def signup_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
