@@ -1,1 +1,1 @@
-web: gunicorn robo.wsgi --log-file - 
+web: python manage.py collectstatic --noinput && python manage.py migrate && gunicorn robo.wsgi --log-file - --bind 0.0.0.0:$PORT 
