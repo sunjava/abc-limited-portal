@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Debug Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .debug { background: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        form { background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 400px; }
+        input, button { display: block; width: 100%; margin: 10px 0; padding: 10px; }
+        button { background: #007cba; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Login Debug Page</h1>
+    
+    <div class="debug">
+        <h3>Current Status:</h3>
+        <p><strong>User:</strong> {{ user.username|default:"Anonymous" }}</p>
+        <p><strong>Authenticated:</strong> {{ user.is_authenticated }}</p>
+        <p><strong>Session Key:</strong> {{ request.session.session_key|default:"None" }}</p>
+        <p><strong>CSRF Token:</strong> {{ csrf_token }}</p>
+    </div>
+    
+    {% if error %}
+    <div class="debug error">
+        <h3>Error:</h3>
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+    <div class="debug success">
+        <h3>✅ You are logged in!</h3>
+        <p><a href="/dashboard/">Go to Dashboard</a></p>
+        <p><a href="/admin/">Go to Admin</a></p>
+        <p><a href="/logout/">Logout</a></p>
+    </div>
+    {% else %}
+    <div class="debug">
+        <h3>Please Login:</h3>
+        <form method="post" action="/debug-login/">
+            {% csrf_token %}
+            <label>Username:</label>
+            <input type="text" name="username" value="sm" required>
+            
+            <label>Password:</label>
+            <input type="password" name="password" value="sunjava@123" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        
+        <p><small>Default credentials are pre-filled</small></p>
+    </div>
+    {% endif %}
+    
+    <div class="debug">
+        <h3>Debug Info:</h3>
+        <p><strong>Request Method:</strong> {{ request.method }}</p>
+        <p><strong>POST Data:</strong> {{ request.POST|default:"None" }}</p>
+        <p><strong>Session Data:</strong> {{ request.session.items|default:"None" }}</p>
+    </div>
+    
+    <p><a href="/login/">Regular Login Page</a> | <a href="/dashboard/">Dashboard</a></p>
+</body>
+</html>

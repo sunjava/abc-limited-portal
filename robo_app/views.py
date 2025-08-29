@@ -183,62 +183,52 @@ def line_details(request, account_id, line_id):
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
-        # Enhanced debug logging
-        print(f"DEBUG: Request method: {request.method}")
-        print(f"DEBUG: Request content type: {request.content_type}")
-        print(f"DEBUG: Request encoding: {request.encoding}")
-        print(f"DEBUG: POST data type: {type(request.POST)}")
-        print(f"DEBUG: POST data keys: {list(request.POST.keys())}")
-        print(f"DEBUG: Raw POST data: {request.POST}")
-        print(f"DEBUG: request.body: {request.body}")
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
         
-        # Try different ways to get the data
-        username_post = request.POST.get('username')
-        password_post = request.POST.get('password')
+        print(f"DEBUG: Login attempt - Username: '{username}', Password length: {len(password)}")
         
-        print(f"DEBUG: username from POST.get('username'): '{username_post}'")
-        print(f"DEBUG: password from POST.get('password'): '{password_post}'")
-        
-        # Try alternative methods
-        if hasattr(request, 'data'):
-            print(f"DEBUG: request.data: {request.data}")
-        
-        # Check if data is in request.POST or request.body
-        if username_post and password_post:
-            username = username_post
-            password = password_post
-            print(f"DEBUG: Using POST data - Username: '{username}', Password: '{password}'")
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None and user.is_active:
+                print(f"DEBUG: Authentication successful for user: {user.username}")
+                login(request, user)
+                next_url = request.GET.get('next', 'dashboard')
+                return redirect(next_url)
+            else:
+                print(f"DEBUG: Authentication failed for username: '{username}'")
+                return render(request, 'robo_app/login.html', {'error': 'Invalid username or password'})
         else:
-            # Try to parse from body if POST is empty
-            print(f"DEBUG: POST data is empty, checking request.body")
-            try:
-                import json
-                body_data = json.loads(request.body)
-                username = body_data.get('username')
-                password = body_data.get('password')
-                print(f"DEBUG: Parsed from body - Username: '{username}', Password: '{password}'")
-            except:
-                print(f"DEBUG: Could not parse body as JSON")
-                username = username_post or ''
-                password = password_post or ''
-        
-        print(f"DEBUG: Final values - Username: '{username}', Password: '{password}'")
-        print(f"DEBUG: Username length: {len(username) if username else 0}")
-        print(f"DEBUG: Password length: {len(password) if password else 0}")
-        
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            print(f"DEBUG: Authentication successful for user: {user.username}")
-            login(request, user)
-            return redirect('dashboard')
-        else:
-            print(f"DEBUG: Authentication failed for username: '{username}'")
-            return render(request, 'robo_app/login.html', {'error': 'Invalid username or password'})
+            return render(request, 'robo_app/login.html', {'error': 'Please enter both username and password'})
     return render(request, 'robo_app/login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+def debug_login_view(request):
+    """Debug login view to test authentication"""
+    error = None
+    
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+        
+        print(f"DEBUG LOGIN: Username='{username}', Password length={len(password)}")
+        
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None and user.is_active:
+                print(f"DEBUG LOGIN: Authentication successful for {user.username}")
+                login(request, user)
+                return redirect('debug_login')  # Redirect to show logged in state
+            else:
+                print(f"DEBUG LOGIN: Authentication failed for '{username}'")
+                error = "Authentication failed"
+        else:
+            error = "Please provide username and password"
+    
+    return render(request, 'debug_login.html', {'error': error})
 
 def signup_view(request):
     if request.method == 'POST':
