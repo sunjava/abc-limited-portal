@@ -260,6 +260,33 @@
             color: var(--tmobile-gray);
             margin: 0 0.5rem;
         }
+        
+        /* Add Account Button Styling */
+        .add-account-btn {
+            background: var(--att-blue) !important;
+            border: none !important;
+            border-radius: 2rem !important;
+            font-weight: 600 !important;
+            padding: 0.75rem 2rem !important;
+            box-shadow: 0 2px 4px rgba(0,168,204,0.3) !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+        }
+        
+        .add-account-btn:hover {
+            background: var(--att-blue-dark) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 8px rgba(0,168,204,0.4) !important;
+            color: white !important;
+        }
+        
+        .add-account-btn:focus {
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(0,168,204,0.3) !important;
+        }
         }
     </style>
 </head>
@@ -298,9 +325,17 @@
         
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="page-title mb-0">All Accounts ({{ total_accounts }})</h1>
-            <a href="{% url 'add_account' %}" class="btn btn-primary" style="background: var(--att-blue); border: none; border-radius: 2rem; font-weight: 600; padding: 0.5rem 1.5rem;">
-                <i class="bi bi-plus-circle"></i> Add Account
+            <a href="{% url 'add_account' %}" class="btn btn-primary add-account-btn">
+                <i class="bi bi-plus-circle me-2"></i> Add Account
             </a>
+        </div>
+        
+        <!-- Call to Action Section -->
+        <div class="alert alert-info d-flex justify-content-between align-items-center mb-3" style="background: var(--att-blue-light); border: 1px solid var(--att-blue); border-radius: 0.5rem;">
+            <div>
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Need to create a new account?</strong> Click the "Add Account" button above to create a new account with multiple lines.
+            </div>
         </div>
         
         <!-- Search Box -->
