@@ -24,7 +24,7 @@ from robo_app.views import (
     get_services, add_service_to_lines, get_line_services, get_account_lines,
     suspend_lines, restore_lines, chatbot_message, create_line, update_account_status,
     add_line_account_selection, update_line_payment_date, update_line_details, create_mirrored_line,
-    get_line_details, logo_test, debug_login_view, database_admin_view
+    get_line_details, logo_test, debug_login_view, database_admin_view, add_account
 )
 
 urlpatterns = [
@@ -32,6 +32,7 @@ urlpatterns = [
     path('dashboard/', hello_world, name='dashboard'),
     path('admin/', admin.site.urls),
     path('accounts/', all_accounts, name='all_accounts'),
+    path('accounts/add/', add_account, name='add_account'),
     path('lines/', all_lines, name='all_lines'),
     path('add-line/', add_line_account_selection, name='add_line_account_selection'),
     path('accounts/<int:account_id>/', account_details, name='account_details'),

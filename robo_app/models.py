@@ -18,7 +18,7 @@ class Account(models.Model):
     ]
     
     account_number = models.CharField(max_length=20, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accounts')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accounts', null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ACTIVE')
     account_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='STANDARD')
     created_on = models.DateTimeField(auto_now_add=True)

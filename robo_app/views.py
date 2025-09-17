@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils import timezone
+from django.contrib import messages
 from decimal import Decimal
 import json
 import uuid
@@ -13,6 +14,7 @@ from datetime import timedelta
 
 from .models import Account, Line, Service, LineService
 from .chatbot import chatbot
+from .forms import AccountForm
 
 # Create your views here.
 
@@ -1130,3 +1132,27 @@ def logo_test(request):
         'static_root': settings.STATIC_ROOT,
     }
     return render(request, 'logo_test.html', context)
+
+@login_required
+def add_account(request):
+    """View to add new accounts with user creation"""
+    if request.method == 'POST':
+        form = AccountForm(request.POST)
+        if form.is_valid():
+            try:
+                account = form.save()
+                messages.success(
+                    request, 
+                    f'Account {account.account_number} created successfully with {form.cleaned_data["num_lines"]} lines!'
+                )
+                return redirect('account_details', account_id=account.id)
+            except Exception as e:
+                messages.error(request, f'Error creating account: {str(e)}')
+    else:
+        form = AccountForm()
+    
+    context = {
+        'form': form,
+        'title': 'Add New Account',
+    }
+    return render(request, 'robo_app/add_account.html', context)
