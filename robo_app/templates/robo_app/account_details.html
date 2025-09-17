@@ -1083,12 +1083,10 @@
           <div class="modal-body">
             <form id="addServiceForm">
               <div class="mb-3">
-                <label for="serviceSelect" class="form-label">Select International Pass:</label>
+                <label for="serviceSelect" class="form-label">Select Service:</label>
                 <select class="form-select" id="serviceSelect" required>
                   <option value="">Choose an option...</option>
-                  <option value="1day">$1: 1 Day (512MB) International Pass</option>
-                  <option value="10day">$35: 10 Day (5GB) International Pass</option>
-                  <option value="30day">$50: 30 Day (15GB) International Pass</option>
+                  <!-- Services will be populated dynamically -->
                 </select>
               </div>
               
@@ -2845,6 +2843,8 @@
             modal.show();
             // Reset modal state when opened
             resetAddServiceModal();
+            // Load services when modal opens
+            loadServices();
           } else {
             console.error('Modal element not found');
           }
@@ -2903,15 +2903,30 @@
         }
       }
       
+      // Function to load services (can be called from modal)
+      async function loadServices() {
+        try {
+          const response = await fetch('/api/services/');
+          const data = await response.json();
+          availableServices = data.services;
+          populateServiceSelect();
+          console.log('Services loaded:', availableServices.length);
+        } catch (error) {
+          console.error('Error loading services:', error);
+        }
+      }
+      
       function populateServiceSelect() {
         const serviceSelect = document.getElementById('serviceSelect');
         serviceSelect.innerHTML = '<option value="">Choose an option...</option>';
         
+        console.log('Populating service select with', availableServices.length, 'services');
         availableServices.forEach(service => {
           const option = document.createElement('option');
           option.value = service.id;
           option.textContent = `$${service.price}: ${service.name}`;
           serviceSelect.appendChild(option);
+          console.log('Added service option:', service.name, 'Price:', service.price);
         });
       }
 
