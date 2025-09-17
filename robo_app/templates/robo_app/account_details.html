@@ -2906,13 +2906,28 @@
       // Function to load services (can be called from modal)
       async function loadServices() {
         try {
+          console.log('Loading services from /api/services/');
           const response = await fetch('/api/services/');
+          console.log('Response status:', response.status);
+          console.log('Response headers:', response.headers);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
           const data = await response.json();
+          console.log('Response data:', data);
           availableServices = data.services;
           populateServiceSelect();
-          console.log('Services loaded:', availableServices.length);
+          console.log('Services loaded successfully:', availableServices.length);
         } catch (error) {
           console.error('Error loading services:', error);
+          console.error('Error details:', error.message);
+          // Show user-friendly error message
+          const serviceSelect = document.getElementById('serviceSelect');
+          if (serviceSelect) {
+            serviceSelect.innerHTML = '<option value="">Error loading services. Please refresh the page.</option>';
+          }
         }
       }
       
