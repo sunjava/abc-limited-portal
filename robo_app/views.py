@@ -411,6 +411,9 @@ def signup_view(request):
 @require_http_methods(["GET"])
 def get_services(request):
     """Get all available services"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+    
     services = Service.objects.filter(is_active=True)
     services_data = []
     
