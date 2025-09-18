@@ -432,6 +432,17 @@ def get_services(request):
     return JsonResponse({'services': services_data})
 
 
+@require_http_methods(["GET"])
+def services_count(request):
+    """Diagnostic endpoint to verify Service records exist in DB."""
+    try:
+        total = Service.objects.count()
+        active = Service.objects.filter(is_active=True).count()
+        return JsonResponse({'total_services': total, 'active_services': active})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
 @login_required
 @csrf_exempt
 @require_http_methods(["POST"])

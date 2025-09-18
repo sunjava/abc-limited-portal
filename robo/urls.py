@@ -24,7 +24,7 @@ from robo_app.views import (
     get_services, add_service_to_lines, get_line_services, get_account_lines,
     suspend_lines, restore_lines, chatbot_message, create_line, update_account_status,
     add_line_account_selection, update_line_payment_date, update_line_details, create_mirrored_line,
-    get_line_details, logo_test, debug_login_view, database_admin_view, add_account
+    get_line_details, logo_test, debug_login_view, database_admin_view, add_account, services_count
 )
 
 urlpatterns = [
@@ -45,6 +45,7 @@ urlpatterns = [
     
     # API endpoints
     path('api/services/', get_services, name='get_services'),
+    path('api/services/count/', services_count, name='services_count'),
     path('api/services/add/', add_service_to_lines, name='add_service_to_lines'),
     path('api/lines/<int:line_id>/services/', get_line_services, name='get_line_services'),
     path('api/accounts/<int:account_id>/lines/', get_account_lines, name='get_account_lines'),
