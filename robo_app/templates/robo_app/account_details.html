@@ -2894,7 +2894,7 @@
       
       async function loadAvailableServices() {
         try {
-          const response = await fetch('/api/services/');
+          const response = await fetch('/api/services/', { credentials: 'same-origin' });
           const data = await response.json();
           availableServices = data.services;
           populateServiceSelect();
@@ -2907,7 +2907,7 @@
       async function loadServices() {
         try {
           console.log('Loading services from /api/services/');
-          const response = await fetch('/api/services/');
+          const response = await fetch('/api/services/', { credentials: 'same-origin' });
           console.log('Response status:', response.status);
           console.log('Response headers:', response.headers);
           
