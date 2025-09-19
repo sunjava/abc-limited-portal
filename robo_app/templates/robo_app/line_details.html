@@ -582,7 +582,7 @@
       // Fetch available services from API
       async function fetchAvailableServices() {
         try {
-          const response = await fetch('/api/services/');
+          const response = await fetch('/api/services/', { credentials: 'same-origin' });
           const data = await response.json();
           availableServices = data.services;
           populateServiceSelect();
@@ -728,6 +728,7 @@
               'Content-Type': 'application/json',
               'X-CSRFToken': getCookie('csrftoken')
             },
+            credentials: 'same-origin',
             body: JSON.stringify(orderData)
           });
           

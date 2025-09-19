@@ -3445,6 +3445,7 @@
             headers: {
               'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
               service_id: parseInt(serviceId),
               line_ids: lineIds,

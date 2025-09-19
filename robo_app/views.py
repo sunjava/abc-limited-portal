@@ -692,6 +692,8 @@ def create_line(request):
     """Create a new line with device, plan, and other options"""
     try:
         data = json.loads(request.body)
+        print(f"DEBUG: create_line received data: {data}")
+        
         account_id = data.get('account_id')
         device_data = data.get('device', {})
         plan_data = data.get('plan', {})
@@ -701,12 +703,15 @@ def create_line(request):
         summary_data = data.get('summary', {})
         
         if not account_id:
+            print("DEBUG: No account_id provided")
             return JsonResponse({'error': 'Account ID is required'}, status=400)
         
         # Validate account exists
         try:
             account = Account.objects.get(id=account_id)
+            print(f"DEBUG: Found account: {account.account_number}")
         except Account.DoesNotExist:
+            print(f"DEBUG: Account {account_id} not found")
             return JsonResponse({'error': 'Account not found'}, status=404)
         
         # Generate a unique MSDN (phone number)
@@ -715,6 +720,20 @@ def create_line(request):
         # Generate a random 7-digit number
         phone_number = f"{random.randint(1000000, 9999999)}"
         msdn = f"+1-{area_code}-{phone_number[:3]}-{phone_number[3:]}"
+        
+        # Ensure MSDN is unique
+        max_attempts = 10
+        attempts = 0
+        while Line.objects.filter(msdn=msdn).exists() and attempts < max_attempts:
+            phone_number = f"{random.randint(1000000, 9999999)}"
+            msdn = f"+1-{area_code}-{phone_number[:3]}-{phone_number[3:]}"
+            attempts += 1
+        
+        if attempts >= max_attempts:
+            print("DEBUG: Failed to generate unique MSDN")
+            return JsonResponse({'error': 'Failed to generate unique phone number'}, status=500)
+        
+        print(f"DEBUG: Generated MSDN: {msdn}")
         
         # Generate employee number
         employee_number = f"EMP{random.randint(1000, 9999)}"
@@ -725,6 +744,13 @@ def create_line(request):
         today = date.today()
         last_day_of_month = calendar.monthrange(today.year, today.month)[1]
         payment_due_date = date(today.year, today.month, last_day_of_month)
+        
+        print(f"DEBUG: About to create line with data:")
+        print(f"  - account: {account}")
+        print(f"  - line_name: Line {account.lines.count() + 1}")
+        print(f"  - msdn: {msdn}")
+        print(f"  - employee_name: {line_data.get('employeeName', 'Unknown Employee')}")
+        print(f"  - employee_number: {employee_number}")
         
         # Create the line with device, plan, and protection information
         line = Line.objects.create(
@@ -756,6 +782,8 @@ def create_line(request):
             total_monthly_cost=summary_data.get('totalMonthly', 0)
         )
         
+        print(f"DEBUG: Line created successfully with ID: {line.id}")
+        
         return JsonResponse({
             'success': True,
             'message': 'Line created successfully',
@@ -777,9 +805,13 @@ def create_line(request):
             }
         })
         
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print(f"DEBUG: JSON decode error: {e}")
         return JsonResponse({'error': 'Invalid JSON data'}, status=400)
     except Exception as e:
+        print(f"DEBUG: Exception in create_line: {e}")
+        import traceback
+        traceback.print_exc()
         return JsonResponse({'error': f'Server error: {str(e)}'}, status=500)
 
 
