@@ -191,7 +191,7 @@ if not DEBUG:
     
     # Session settings for production
     SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_HTTPONLY = False  # Allow JavaScript access for API calls
     SESSION_COOKIE_SAMESITE = 'Lax'
     
     # CSRF settings for production
